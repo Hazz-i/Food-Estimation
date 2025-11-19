@@ -81,20 +81,9 @@ def predict(img: Image.Image, model, labels=None):
         'top_results': top_results,
     }
     
-# def gemini_predict(image: Image.Image):
-#     """Use Google Gemini API to classify the image."""
-#     client = genai.Client()
-#     response = client.predict.image_classification(
-#         model="gemini-1.5-image",
-#         images=[image],
-#         max_labels=3
-#     )
-#     return response
-
-
 def main():
     st.set_page_config(page_title='Food / Fruit & Veg Classifier', layout='centered')
-    st.title('Image Upload, Preview and Classification')
+    st.title('Food / Fruit & Veg Estimation Classifier')
 
     # Load labels from `class_names.txt` if available (no sidebar settings)
     try:
@@ -143,15 +132,20 @@ def main():
             else:
                 st.success(f"Prediksi: {label} ({conf:.2f}%)")
             
-                client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-    
-                response = client.models.generate_content(
-                    model="gemini-2.5-flash", contents=f"""Berdasarkan hasil klasifikasi gambar {label}. 
-                    berikan estimasi waktu penyimpanan yang ideal untuk menjaga kesegarannya,
-                    serta tips penyimpanan yang tepat agar tetap segar lebih lama (semisal berikan tips penyimpanan di tempat yang sejuk atau kering dan 
-                    berikan estimasi pada masing-masing penyimpanan). **BERIKAN RESPON DALAM BENTUK LIST**""",
-                )
-                st.write(response.text)
+                try:
+                    with st.spinner('Mengambil informasi penyimpanan dari Gemini...'):
+                        client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+            
+                        response = client.models.generate_content(
+                            model="gemini-2.5-flash", contents=f"""Berdasarkan hasil klasifikasi gambar {label}. 
+                            berikan estimasi waktu penyimpanan yang ideal untuk menjaga kesegarannya,
+                            serta tips penyimpanan yang tepat agar tetap segar lebih lama (semisal berikan tips penyimpanan di tempat yang sejuk atau kering dan 
+                            berikan estimasi pada masing-masing penyimpanan). **BERIKAN RESPON DALAM BENTUK LIST**""",
+                        )
+                    st.write(response.text)
+                except Exception as e:
+                    st.error(f"Gagal mendapatkan informasi dari Gemini: {e}")
+                    st.info("Silakan periksa API key Gemini Anda atau coba lagi nanti.")
 
             st.subheader('Top predictions')
             for idx, conf_i, lab in result['top_results']:
