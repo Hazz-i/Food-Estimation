@@ -127,7 +127,7 @@ def main():
             label = result['label']
 
             # If confidence is low, show warning color
-            if conf < 50.0:
+            if conf < 99.0:
                 st.warning(f"Low confidence: {label} ({conf:.2f}%) — kemungkinan bukan kelas yang cocok")
             else:
                 st.success(f"Prediksi: {label} ({conf:.2f}%)")
