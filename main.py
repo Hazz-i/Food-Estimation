@@ -160,9 +160,6 @@ def main():
             except Exception:
                 # don't fail if charting fails
                 pass
-        
-        
-
 
 if __name__ == '__main__':
     main()
