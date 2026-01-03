@@ -20,3 +20,34 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+
+
+version: '3.8'
+
+
+# PROD VER
+# services:
+#   food-estimation:
+#     # Menggunakan image yang sudah Anda build sebelumnya (berdasarkan screenshot Anda)
+#     image: food-estimation-food-estimation:latest
+#     container_name: food-estimation-app
+#     ports:
+#       - '8501:8501'
+#     environment:
+#       - GOOGLE_API_KEY=${GEMINI_API_KEY}
+#     env_file:
+#       # Menggunakan path absolut agar CasaOS bisa menemukan file .env
+#       - /DATA/AppData/ml/Food-Estimation/.env
+#     volumes:
+#       # WAJIB menggunakan path absolut (alamat lengkap) di CasaOS
+#       - /DATA/AppData/ml/Food-Estimation/model:/app/model:ro
+#     restart: unless-stopped
+#     healthcheck:
+#       test: ['CMD', 'curl', '-f', 'http://localhost:8501/_stcore/health']
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+#       start_period: 40s
+#     labels:
+#       icon: https://cdn-icons-png.flaticon.com/512/2276/2276931.png
+#       title: "Food Estimation AI"
